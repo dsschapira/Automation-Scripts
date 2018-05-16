@@ -19,7 +19,7 @@ From the current directory, this will read a manifest.txt file to determine how 
 ```
 zipbanners <true or false>
 
-True will include a campaign name in zipped files, False will not
+True will include a campaign name in zipped files, False will not.  Default is False
 ```
 The manifest.txt file is absolutely mandatory for this and has a specific format.  An example is below:
 ```
