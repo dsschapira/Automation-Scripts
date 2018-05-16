@@ -24,7 +24,6 @@ cwd = WShell.CurrentDirectory
 ' Working directory which defines the zip format
 
 strCommand = """"&"C:\Program Files\7-Zip\7z.exe"""&" a -tzip"
-WScript.Echo strCommand
 manifest = cwd&"\manifest.txt"
 
 set manifestFile = FSO.OpenTextFile(manifest,ForReading)
