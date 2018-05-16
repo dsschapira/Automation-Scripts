@@ -1,10 +1,18 @@
-Const zipExe = "C:\Program Files\7-Zip\7z.exe"
+Const zipExe = "C:\Program Files\7-Zip\7z.exe" 'UPDATE 7z.exe PATH HERE IF NEEDED
 Const ForReading = 1
-Const ForWriting = 2
-Const AppendStr = "_Zipped"
 
 Set WShell = CreateObject("WScript.Shell")
 Set FSO = CreateObject("Scripting.FileSystemObject")
+Set args = WScript.Arguments
+
+If args.count > 0 Then
+    if NOT(vartype(args(0)) = vbBoolean) Then
+        useCampaignName = false
+    Else
+        useCampaignName = args(0)
+    End If
+End If
+
 cwd = WShell.CurrentDirectory
 
 ' 7-zip command line command format is:
@@ -32,9 +40,9 @@ ReDim foldersToZip(-1)
 ReDim preserve foldersToZip(UBound(folders))
 
 'Make the first folder before looping through
-FSO.CreateFolder cwd&"\"&folders(0)&AppendStr
+FSO.CreateFolder cwd&"\"&folders(0)&"_Zipped"
 folderPaths(0) = cwd
-zippedFolderParent = cwd&"\"&folders(0)&AppendStr
+zippedFolderParent = cwd&"\"&folders(0)&"_Zipped"
 parentDirs(0) = ""
 parentDirs(1) = ""
 foldersToZip(0) = true
@@ -42,6 +50,7 @@ first = true
 index = 1 'Start at 1 since we are skipping the first entry
 parentDir = ""
 prevLevel = 999 'start really high so that it's like we're starting at the first level again
+'Loop through to fill our arrays with information about how to structure the zipped up banner files
 For Each folder in folders 
     continueFor = true
     If first Then 
@@ -82,18 +91,30 @@ For Each folder in folders
     End If
 Next
 
-'Relative folder paths are now inside of the folderPaths and zippedFolderPaths arrays
+'Relative folder paths are now in arrays
 
 For index = 0 to UBound(folderPaths) Step 1
     If index > 0 Then
         If NOT(foldersToZip(index)) Then
             FSO.CreateFolder zippedFolderParent&folderPaths(index)
+            If useCampaignName Then
+                'If we have this set to true, then we want to include _<campaign name> before the _Zipped
+                campaignName = "_"&Mid(folderPaths(index),2,len(folderPaths(index)))
+            Else
+                campaignName=""
+            End If
         Else
             'Zip these files up!
             fileToZip = """"&folderPaths(0)&folderPaths(index)&""""
-            zipDest = """"&zippedFolderParent&folderPaths(index)&AppendStr&".zip"&""""
-            WScript.Echo "Zipping: "&fileToZip
+            zipDest = """"&zippedFolderParent&folderPaths(index)&campaignName&".zip"&""""
+            WScript.Echo "Zipping: "&fileToZip&vbCrLf&"To: "&zipDest
             WShell.run strCommand&" "&zipDest&" "&fileToZip
         End If
     End If
 Next
+
+'Finally, zip up the main Zipp folder
+fileToZip = """"&zippedFolderParent&""""
+zipDest =  """"&zippedFolderParent&".zip"&""""
+WScript.Echo "Zipping: "&fileToZip&vbCrLf&"To: "&zipDest
+WShell.run strCommand&" "&zipDest&" "&fileToZip
