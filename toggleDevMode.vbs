@@ -40,6 +40,9 @@ For Each oFile in fileArray
     objFile.Close
     WScript.Echo "Updated: "&oFile
 Next
+if(UBound(fileArray)<=0) then
+    WScript.Echo "No .js files found in this or any subdirectories."
+end if
 WScript.Echo "Finished"
 
 
