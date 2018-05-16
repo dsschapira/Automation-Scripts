@@ -9,6 +9,7 @@ toggleDevMode <var name> <delimiter plus any spaces between delim and value ex: 
 Example:
 toggleDevMode devMode ": " false
 ```
+There are some assumptions made in the script that the switch is between a true/false value so it won't work for non true/false swaps.
 
 zipBanners
 ===========
