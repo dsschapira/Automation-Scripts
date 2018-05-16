@@ -107,7 +107,7 @@ For index = 0 to UBound(folderPaths) Step 1
             'Zip these files up!
             fileToZip = """"&folderPaths(0)&folderPaths(index)&""""
             zipDest = """"&zippedFolderParent&folderPaths(index)&campaignName&".zip"&""""
-            WScript.Echo "Zipping: "&fileToZip&vbCrLf&"To: "&zipDest
+            WScript.Echo "Zipping:"&VBTab&fileToZip&vbCrLf&"To:"&VBTab&VBTab&zipDest
             WShell.run strCommand&" "&zipDest&" "&fileToZip
         End If
     End If
@@ -116,5 +116,5 @@ Next
 'Finally, zip up the main Zipp folder
 fileToZip = """"&zippedFolderParent&""""
 zipDest =  """"&zippedFolderParent&".zip"&""""
-WScript.Echo "Zipping: "&fileToZip&vbCrLf&"To: "&zipDest
+WScript.Echo "Zipping:"&VBTab&fileToZip&vbCrLf&"To:"&VBTab&VBTab&zipDest
 WShell.run strCommand&" "&zipDest&" "&fileToZip
