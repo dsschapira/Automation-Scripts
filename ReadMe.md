@@ -12,7 +12,10 @@ toggleDevMode devMode ": " false
 
 zipBanners
 ===========
-From the current directory, this will read a manifest.txt file to determine how banner files should be zipped up using 7-zip. Usage is
+Requirements:
+7-zip is needed and the path to the .exe file needs to be set in zipBanners.vbs 
+
+From the current directory, this will read a manifest.txt file to determine how banner files should be zipped up using 7-zip. Usage is:
 ```
 zipbanners <true or false>
 
