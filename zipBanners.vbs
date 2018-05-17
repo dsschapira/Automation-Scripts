@@ -39,8 +39,8 @@ ReDim folderPaths(-1)
 ReDim preserve folderPaths(UBound(folders))  'make an array to fill with the paths
 ReDim parentDirs(-1)
 ReDim preserve parentDirs(UBound(folders))  'Holds the parent path for each level
-ReDim foldersToZip(-1)
-ReDim preserve foldersToZip(UBound(folders))
+ReDim folderAction(-1)
+ReDim preserve folderAction(UBound(folders))
 
 'Make the first folder before looping through
 FSO.CreateFolder cwd&"\"&folders(0)&"_Zipped"
@@ -48,7 +48,7 @@ folderPaths(0) = cwd
 zippedFolderParent = cwd&"\"&folders(0)&"_Zipped"
 parentDirs(0) = ""
 parentDirs(1) = ""
-foldersToZip(0) = true
+folderAction(0) = "zip"
 first = true
 index = 1 'Start at 1 since we are skipping the first entry
 parentDir = ""
@@ -81,10 +81,14 @@ For Each folder in folders
     If continueFor Then
         If Mid(folder,len(folder)-1, len(folder)) = "-z" Then
             'If the folder ends in -z, we will zip it
-            foldersToZip(index) = true
+            folderAction(index) = "zip"
+            folderStr = Mid(folder,sliceStrIndex,len(folder)-sliceStrIndex-1)
+        ElseIf Mid(folder,len(folder)-1, len(folder)) = "-c" Then
+            'If the folder ends in -c, we will copy it
+            folderAction(index) = "copy"
             folderStr = Mid(folder,sliceStrIndex,len(folder)-sliceStrIndex-1)
         Else
-            foldersToZip(index) = false
+            folderAction(index) = false
             folderStr = Mid(folder,sliceStrIndex,len(folder)-sliceStrIndex+1)
         End If
         parentDirs(level+1) = parentDirs(level)&"\"&folderStr
@@ -98,14 +102,23 @@ Next
 
 For index = 0 to UBound(folderPaths) Step 1
     If index > 0 Then
-        If NOT(foldersToZip(index)) Then
-            FSO.CreateFolder zippedFolderParent&folderPaths(index)
-            If useCampaignName Then
-                'If we have this set to true, then we want to include _<campaign name> before the _Zipped
-                campaignName = "_"&Mid(folderPaths(index),2,len(folderPaths(index)))
+        If NOT(folderAction(index)="zip") Then
+            If NOT(folderAction(index)="copy") Then
+                FSO.CreateFolder zippedFolderParent&folderPaths(index)
+                If useCampaignName Then
+                    'If we have this set to true, then we want to include _<campaign name> before the _Zipped
+                    campaignName = "_"&Mid(folderPaths(index),2,len(folderPaths(index)))
+                Else
+                    campaignName=""
+                End If
             Else
-                campaignName=""
-            End If
+                'Copy the folder
+                folderToCopy = folderPaths(0)&folderPaths(index)
+                folderDest = zippedFolderParent&folderPaths(index)
+                WScript.Echo "Coppying:"&VBTab&""""&folderToCopy&""""&vbCrLf&"To:"&VBTab&VBTab&""""&folderDest&""""
+                FSO.CreateFolder folderDest
+                FSO.CopyFolder folderToCopy, folderDest
+            End IF
         Else
             'Zip these files up!
             fileToZip = """"&folderPaths(0)&folderPaths(index)&""""
