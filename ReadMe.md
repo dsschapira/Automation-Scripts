@@ -35,11 +35,11 @@ FinalZipFileName
 --Size2-z
 -backup_images-c
 ```
-All files marked with a "-z" at the end will be zipped up. 
+All folders marked with a __"-z"__ at the end will be zipped up. 
 
-All folders marked with a "-c" at the end will be copied over to final zip directory
+All folders marked with a __"-c"__ at the end will be copied over to final zip directory
 
-The number of dashes at the start of a line determines how many folders deep the zip-script will look and how it is packaged up at the end.  *There should be no spaces between these dashes or between the dashes and name of the folders.*
+The number of dashes at the start of a line determines how many folders deep the zip-script will look and how it is packaged up at the end.  **There should be no spaces between these dashes or between the dashes and name of the folders.**
 
 Additionally, the folder names there should correspond to the folders used when developing.  This both determines the search-through-folders structure and the output structure.
 
