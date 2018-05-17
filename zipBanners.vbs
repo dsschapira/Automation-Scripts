@@ -7,7 +7,11 @@ Set args = WScript.Arguments
 
 If args.count > 0 Then
     if NOT(vartype(args(0)) = vbBoolean) Then
-        useCampaignName = false
+        If args(0) = "true" Then
+            useCampaignName = true
+        Else
+            useCampaignName = false
+        End If
     Else
         useCampaignName = args(0)
     End If
