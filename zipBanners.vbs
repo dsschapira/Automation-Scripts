@@ -66,6 +66,7 @@ For Each folder in folders
     sliceStrIndex = 0
     continueCounting = true
     For i=1 to Len(folder)
+    ' Count leading dashes to determine folder level
         If Mid(folder,i,1) = "-" Then
             If continueCounting Then
                 level = level + 1
@@ -77,7 +78,7 @@ For Each folder in folders
             End If
         End If
     Next
-    ' We now have our folder level
+    ' We now have our folder depth
     If continueFor Then
         If Mid(folder,len(folder)-1, len(folder)) = "-z" Then
             'If the folder ends in -z, we will zip it
@@ -108,6 +109,7 @@ For index = 0 to UBound(folderPaths) Step 1
                 If useCampaignName Then
                     'If we have this set to true, then we want to include _<campaign name> before the _Zipped
                     campaignName = "_"&Mid(folderPaths(index),2,len(folderPaths(index)))
+                    campaignName = Replace(campaignName,"\","_")
                 Else
                     campaignName=""
                 End If
@@ -124,6 +126,9 @@ For index = 0 to UBound(folderPaths) Step 1
             fileToZip = """"&folderPaths(0)&folderPaths(index)&""""
             zipDest = """"&zippedFolderParent&folderPaths(index)&campaignName&".zip"&""""
             WScript.Echo "Zipping:"&VBTab&fileToZip&vbCrLf&"To:"&VBTab&VBTab&zipDest
+            WScript.Echo "zippedFolderParent: "&zippedFolderParent
+            WScript.Echo "folderPath: "&folderPaths(index)
+            WScript.Echo "campaignName: "&campaignName
             WShell.run strCommand&" "&zipDest&" "&fileToZip
         End If
     End If
