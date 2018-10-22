@@ -126,9 +126,6 @@ For index = 0 to UBound(folderPaths) Step 1
             fileToZip = """"&folderPaths(0)&folderPaths(index)&""""
             zipDest = """"&zippedFolderParent&folderPaths(index)&campaignName&".zip"&""""
             WScript.Echo "Zipping:"&VBTab&fileToZip&vbCrLf&"To:"&VBTab&VBTab&zipDest
-            WScript.Echo "zippedFolderParent: "&zippedFolderParent
-            WScript.Echo "folderPath: "&folderPaths(index)
-            WScript.Echo "campaignName: "&campaignName
             WShell.run strCommand&" "&zipDest&" "&fileToZip
         End If
     End If
